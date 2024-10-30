@@ -3,7 +3,6 @@ from dijkstar import find_path
 from Core.libs.functions import *
 
 
-
 graphes = graph_generator()
 
 
@@ -82,9 +81,8 @@ def find_best_route(source, destination) -> dict:
                         overview, route[i], now, corrent_line, False, "")
                 travel_cost += 2
                 if i == 0:
-                    first = str(datetime.strptime(now, "%H:%M") - start_time)
-
-
+                    next_train = str(datetime.strptime(now, "%H:%M") - start_time)
+                    next_train = str(datetime.strptime(next_train, "%H:%M:%S").minute)
 
         else:
 
@@ -103,4 +101,8 @@ def find_best_route(source, destination) -> dict:
 
     time = str(datetime.strptime(now, "%H:%M") - start_time).split(":")
 
-    return {"route": overview, "travel_time": f"{time[0]}:{time[1]}", "travel_cost": check_cost(travel_cost), "travel_guide": travel_guide , "first" : str(datetime.strptime(first, "%H:%M:%S").minute)}
+    return {"route": overview, 
+            "travel_time": f"{time[0]}:{time[1]}", 
+            "travel_cost": check_cost(travel_cost), 
+            "travel_guide": travel_guide, 
+            "next_train": next_train}
