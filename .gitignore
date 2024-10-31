@@ -162,4 +162,3 @@ cython_debug/
 #.idea/
 
 /Core/static
-/Core/cashe
