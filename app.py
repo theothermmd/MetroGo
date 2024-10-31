@@ -5,6 +5,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 from Core.core import find_best_route
 import time
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+CASHE = os.getenv('CASHE')
 
 
 app = FastAPI()
@@ -62,7 +68,7 @@ async def rate_limit_middleware(request: Request, call_next):
 @app.post("/get_route/")
 async def get_route(request: RouteRequest):
     try:
-        route_data = find_best_route(request.source, request.destination)
+        route_data = find_best_route(request.source, request.destination, CASHE)
         return JSONResponse(content=route_data, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
