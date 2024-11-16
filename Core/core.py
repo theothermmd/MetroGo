@@ -1,6 +1,6 @@
 from datetime import datetime
 from dijkstar import find_path
-from libs.functions import *
+from Core.libs.functions import *
 base_path = os.path.join(os.getcwd(), "Core", "static")
 stations_cashe = json.load(open(f"{base_path}/stations_cashe.json", "r", encoding="UTF-8"))
 graphes = graph_generator()
