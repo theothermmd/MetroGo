@@ -7,64 +7,62 @@ from fuzzywuzzy import process
 import bisect
 
 
-
-
-
-
 base_path = os.path.join(os.getcwd(), "Core", "static")
 
-# Load data
+
 stations_times = {f"line_{i}": json.load(open(f"{base_path}/stations_{i}.json", "r", encoding="UTF-8")) for i in range(1, 8)}
 
 stations = json.load(open(f"{base_path}/stations.json", "r", encoding="utf-8"))
-
-# Collect station names
-stations_names = []
 lines = {f"line_{m}": stations["stations"][f"line_{m}"] for m in range(1, 8)}
+
+
+stations_names = []
 for line in lines.values():
     stations_names.extend(line)
 
-# Define terminals for each line
 terminals = {line_name: [line[0], line[-1]] for line_name, line in lines.items()}
 
 line_lookup = {}
-for line, stations in lines.items(): 
-
+for line, stations in lines.items():
     for i in range(len(stations) - 1):
         line_lookup[(stations[i], stations[i + 1])] = line
         line_lookup[(stations[i + 1], stations[i])] = line
 
+def normalize_str(s) -> str: 
 
-def find_closest_word(input_word, word_list) -> str:
+    return unicodedata.normalize("NFC", s).strip()
+
+def find_closest_word(input_word, word_list, score_threshold=70) -> str:
 
     closest_match, score = process.extractOne(input_word, word_list)
-    return closest_match if score > 70 else None
+    return closest_match if score > score_threshold else None
+
 
 def find_terminal_direction(line, current_station, next_station) -> str:
 
-    if lines[line].index(current_station) < lines[line].index(next_station):
-        return terminals[line][1]
-    else:
-        return terminals[line][0]
-    
-def get_next_time(station_times, current_time):
-    
-    if not isinstance(current_time, datetime):
-        current_time = datetime.strptime(current_time, "%H:%M")
-    flag = False
-    for time_str in station_times:
+    return terminals[line][1] if lines[line].index(current_station) < lines[line].index(next_station) else terminals[line][0]
 
-        if time_str == "None" or time_str == None or time_str == "" or time_str == "none":
-            flag = True     
+
+def is_time_valid(time_str):
+    return time_str not in [None, "", "None", "none"]
+
+
+def get_next_time(station_times, current_time):
+    current_time = datetime.strptime(current_time, "%H:%M") if not isinstance(current_time, datetime) else current_time
+    no_schedule_flag = False
+
+    for time_str in station_times:
+        if not is_time_valid(time_str):
+            no_schedule_flag = True
             continue
 
-        if time_str and time_str != "None" and datetime.strptime(time_str, "%H:%M") > current_time:
-            
-            if len(str(datetime.strptime(time_str, '%H:%M').minute)) == 1 :
-                return f"{datetime.strptime(time_str, '%H:%M').hour}:0{datetime.strptime(time_str, '%H:%M').minute}" , flag
-            else :
-                return f"{datetime.strptime(time_str, "%H:%M").hour}:{datetime.strptime(time_str, '%H:%M').minute}" , flag
-    return None
+        next_time = datetime.strptime(time_str, "%H:%M")
+        if next_time > current_time:
+            formatted_time = next_time.strftime("%H:%M")
+            return formatted_time, no_schedule_flag
+    return None, no_schedule_flag
+
+
 def add_overview_entry(overview, station_name, time, line_name, is_line_change, message="") -> None:
 
     overview.append({
@@ -74,6 +72,8 @@ def add_overview_entry(overview, station_name, time, line_name, is_line_change, 
         "is_line_change": is_line_change,
         "message": message
     })
+
+
 def get_line_color(line_name) -> str:
 
     line_colors = {
@@ -88,52 +88,59 @@ def get_line_color(line_name) -> str:
     return line_colors.get(line_name, "Unknown")
 
 
-def normalize_str(s) -> str:
-
-    return unicodedata.normalize("NFC", s).strip()
 
 
-        
-def check_line(station1, station2=None) -> str :
+def check_line(station1, station2=None) -> str:
+
     if station2:
         return line_lookup.get((station1, station2))
-    
 
     for line, stations in lines.items():
         if station1 in stations:
             return line
-    return None 
+        
+    return None
+
 
 def graph_generator() -> dict:
-    graph_all : Graph = Graph()
-    graph_line_1 : Graph = Graph()
-    graph_line_2 : Graph = Graph()
-    graph_line_3 : Graph = Graph()
-    graph_line_4 : Graph = Graph()
-    graph_line_5 : Graph = Graph()
-    graph_line_6 : Graph = Graph()
-    graph_line_7 : Graph = Graph()
-    graph_lines = [graph_line_1 , graph_line_2 , graph_line_3 , graph_line_4 , graph_line_5 , graph_line_6 , graph_line_7]
+    graphs = {
+        'lines': {f"line_{i}": Graph() for i in range(1, 8)},
+        'graph_all': Graph(),
+        'linetoline': {}
+    }
 
-    for j , graph in zip(range(1, 8) , graph_lines):
-        for i in range(len(lines[f"line_{j}"]) - 1):
-            graph.add_edge(lines[f"line_{j}"][i], lines[f"line_{j}"][i + 1], 1)
-            graph.add_edge(lines[f"line_{j}"][i + 1], lines[f"line_{j}"][i], 1)
+    for i in range(1, 8):
+        for j in range(1, 8):
 
-            
-    for line in lines.values():
-            for i in range(len(line) - 1):
-                graph_all.add_edge(line[i], line[i + 1], 1)
-                graph_all.add_edge(line[i + 1], line[i], 1)
-    return {'graph_all' : graph_all , 'line_1' : graph_line_1 , 'line_2' : graph_line_2 , 'line_3' : graph_line_3, 'line_4' : graph_line_4 , 'line_5' : graph_line_5 , 'line_6' : graph_line_6 , 'line_7' : graph_line_7 ,}
+            if len(set(lines[f'line_{i}']).intersection(lines[f'line_{j}'])) >= 1:
+
+                graphs['linetoline'][f"line_{i}toline_{j}"] = Graph()
+
+                line1 = lines[f'line_{i}']
+                for x in range(len(line1) - 1):
+                    graphs['linetoline'][f"line_{i}toline_{j}"].add_edge(line1[x], line1[x + 1], 1)
+                    graphs['linetoline'][f"line_{i}toline_{j}"].add_edge(line1[x + 1], line1[x], 1)
+
+                line2 = lines[f'line_{j}']
+                for y in range(len(line2) - 1):
+                    graphs['linetoline'][f"line_{i}toline_{j}"].add_edge(line2[y], line2[y + 1], 1)
+                    graphs['linetoline'][f"line_{i}toline_{j}"].add_edge(line2[y + 1], line2[y], 1)
+
+    for line_id, line in lines.items():
+        for i in range(len(line) - 1):
+            for graph in [graphs['lines'][line_id], graphs['graph_all']]:
+                graph.add_edge(line[i], line[i + 1], 1)
+                graph.add_edge(line[i + 1], line[i], 1)
+
+    return graphs
 
 
-def check_cost(distance : int) -> str :
+def check_cost(distance: int) -> str:
     costs_in_city = {
-        2: 33.000, 
-        4: 33.412, 
-        6: 33.824, 
-        8: 34.236,  
+        2: 33.000,
+        4: 33.412,
+        6: 33.824,
+        8: 34.236,
         10: 34.648,
         12: 35.060,
         15: 35.678,
@@ -142,20 +149,13 @@ def check_cost(distance : int) -> str :
         26: 37.944,
         30: 38.768,
     }
-
     keys = sorted(costs_in_city.keys())
     index = bisect.bisect_left(keys, distance)
-
-    if index == len(keys):  
-        return str((costs_in_city[keys[-1]]))
-    elif distance == keys[index]: 
-        return str((costs_in_city[keys[index]]))
-    else: 
-        return str((costs_in_city[keys[index]]))
+    return str(costs_in_city[keys[min(index, len(keys) - 1)]])
 
 
-def add_travel_guide_entry(flag , travel_guide, station_name, line_name , terminal) -> None:
-    if flag == "source".lower(): 
+def add_travel_guide_entry(flag, travel_guide, station_name, line_name, terminal) -> None:
+    if flag == "source".lower():
         travel_guide.append(f"در ایستگاه {station_name} وارد خط {line_name} شوید و به سمت {terminal} سوار مترو شوید.")
     elif flag == "change".lower():
         travel_guide.append(f"در ایستگاه {station_name} از مترو پیاده شوید. سپس وارد خط {line_name} شده و به سمت {terminal} سوار مترو شوید.")

@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
-from Core.core import find_best_route
+from core import find_best_route
 import time
 import os
 from dotenv import load_dotenv
@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 CASHE = os.getenv('CASHE')
+PORT = os.getenv('PORT')
+LISTEN = os.getenv('LISTEN')
 
 
 app = FastAPI()
@@ -76,4 +78,4 @@ async def get_route(request: RouteRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=LISTEN, port=PORT)

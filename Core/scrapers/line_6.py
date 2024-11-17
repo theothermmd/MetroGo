@@ -7,7 +7,7 @@ import unicodedata
 def normalize_str(s):
     return unicodedata.normalize('NFC', s).strip()
 def line_6() : 
-    wb2 = load_workbook(os.getcwd() + '/Core/static/excels/line_6.xlsx')
+    wb2 = load_workbook(os.getcwd() + '/Core/excels/line_6.xlsx')
 
     ws3 = wb2['شهيدآرمان - عادي']
 

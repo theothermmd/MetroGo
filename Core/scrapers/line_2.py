@@ -7,7 +7,7 @@ import unicodedata
 def normalize_str(s):
     return unicodedata.normalize('NFC', s).strip()
 def line_2() : 
-    wb2 = load_workbook(os.getcwd() + '/Core/static/excels/line_2.xlsx')
+    wb2 = load_workbook(os.getcwd() + '/Core/excels/line_2.xlsx')
 
     ws3 = wb2['صادقيه عادي']
 
@@ -22,22 +22,11 @@ def line_2() :
 
     x = {'line_2': {
 
-        'عادی': {'فرهنگسرا': {}, 'تهران (صادقيه)': {}},
-        'پنجشنبه': {'فرهنگسرا': {}, 'تهران (صادقيه)': {}},
-        'جمعه': {'فرهنگسرا': {}, 'تهران (صادقيه)': {}},
+        'عادی': {'فرهنگسرا': {i : [] for i in stations}, 'تهران (صادقيه)': {i : [] for i in stations}},
+        'پنجشنبه': {'فرهنگسرا': {i : [] for i in stations}, 'تهران (صادقيه)': {i : [] for i in stations}},
+        'جمعه': {'فرهنگسرا': {i : [] for i in stations}, 'تهران (صادقيه)': {i : [] for i in stations}},
 
     }}
-
-    for j in stations:
-        x['line_2']['عادی']["فرهنگسرا"][j] = []
-        x['line_2']['پنجشنبه']["فرهنگسرا"][j] = []
-        x['line_2']['جمعه']["فرهنگسرا"][j] = []
-
-    for j in stations:
-        x['line_2']['عادی']["تهران (صادقيه)"][j] = []
-        x['line_2']['پنجشنبه']["تهران (صادقيه)"][j] = []
-        x['line_2']['جمعه']["تهران (صادقيه)"][j] = []
-
 
     # stable ============
     for col in range(3, ws3.max_column, 2):
