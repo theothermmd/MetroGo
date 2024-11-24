@@ -24,4 +24,4 @@ jobs:
 
     - name: Run Tests
       run: |
-        python test.py
+        python Core/test.py
