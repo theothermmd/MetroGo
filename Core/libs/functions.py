@@ -3,15 +3,16 @@ from dijkstar import Graph
 import json
 import os
 import unicodedata
-from fuzzywuzzy import process
+from rapidfuzz import process
 import bisect
 
 
 base_path = os.path.join(os.getcwd(), "Core", "static")
 
-
+# marge files to one file
 stations_times = {f"line_{i}": json.load(open(f"{base_path}/stations_{i}.json", "r", encoding="UTF-8")) for i in range(1, 8)}
 
+# marge these lines to one
 stations = json.load(open(f"{base_path}/stations.json", "r", encoding="utf-8"))
 lines = {f"line_{m}": stations["stations"][f"line_{m}"] for m in range(1, 8)}
 
@@ -28,13 +29,14 @@ for line, stations in lines.items():
         line_lookup[(stations[i], stations[i + 1])] = line
         line_lookup[(stations[i + 1], stations[i])] = line
 
+# delete this function
 def normalize_str(s) -> str: 
 
     return unicodedata.normalize("NFC", s).strip()
 
-def find_closest_word(input_word, word_list, score_threshold=70) -> str:
 
-    closest_match, score = process.extractOne(input_word, word_list)
+def find_closest_word(input_word, word_list, score_threshold=70) -> str:
+    closest_match, score, _ = process.extractOne(input_word, word_list)
     return closest_match if score > score_threshold else None
 
 
@@ -43,6 +45,8 @@ def find_terminal_direction(line, current_station, next_station) -> str:
     return terminals[line][1] if lines[line].index(current_station) < lines[line].index(next_station) else terminals[line][0]
 
 
+
+# optimize this fucking function
 def is_time_valid(time_str):
     return time_str not in [None, "", "None", "none"]
 
@@ -73,6 +77,13 @@ def add_overview_entry(overview, station_name, time, line_name, is_line_change, 
         "message": message
     })
 
+def add_travel_guide_entry(flag, travel_guide, station_name, line_name, terminal) -> None:
+    if flag == "source".lower():
+        travel_guide.append(f"در ایستگاه {station_name} وارد خط {line_name} شوید و به سمت {terminal} سوار مترو شوید.")
+    elif flag == "change".lower():
+        travel_guide.append(f"در ایستگاه {station_name} از مترو پیاده شوید. سپس وارد خط {line_name} شده و به سمت {terminal} سوار مترو شوید.")
+    elif flag == "destination".lower():
+        travel_guide.append(f"در ایستگاه {station_name} از مترو پیاده شوید و از ایستگاه خارج شوید. ")
 
 def get_line_color(line_name) -> str:
 
@@ -154,10 +165,3 @@ def check_cost(distance: int) -> str:
     return str(costs_in_city[keys[min(index, len(keys) - 1)]])
 
 
-def add_travel_guide_entry(flag, travel_guide, station_name, line_name, terminal) -> None:
-    if flag == "source".lower():
-        travel_guide.append(f"در ایستگاه {station_name} وارد خط {line_name} شوید و به سمت {terminal} سوار مترو شوید.")
-    elif flag == "change".lower():
-        travel_guide.append(f"در ایستگاه {station_name} از مترو پیاده شوید. سپس وارد خط {line_name} شده و به سمت {terminal} سوار مترو شوید.")
-    elif flag == "destination".lower():
-        travel_guide.append(f"در ایستگاه {station_name} از مترو پیاده شوید و از ایستگاه خارج شوید. ")

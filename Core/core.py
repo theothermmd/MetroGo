@@ -1,11 +1,11 @@
 from datetime import datetime
 from dijkstar import find_path
-from Core.libs.functions import *
+from libs.functions import *
 base_path = os.path.join(os.getcwd(), "Core", "static")
-stations_cashe = json.load(open(f"{base_path}/stations_cashe.json", "r", encoding="UTF-8"))
 graphes = graph_generator()
+import cProfile
 
-def find_best_route(source : str, destination :str , cashe : bool) -> dict:
+def find_best_route(source : str, destination :str) -> dict:
 
     source: str = find_closest_word(source, stations_names)
     destination: str = find_closest_word(destination, stations_names)
@@ -14,24 +14,24 @@ def find_best_route(source : str, destination :str , cashe : bool) -> dict:
     if source == destination:
         return {"error": "The ُsource and destination stations cannot be the same"}
     
+    # now = datetime.strptime(f"{datetime.now().hour}:{ datetime.now().minute}", "%H:%M")
     now = datetime.strptime("7:40", "%H:%M")
     start_time: datetime = now
 
     if not datetime.strptime("5:00", "%H:%M") < now < datetime.strptime("22:00", "%H:%M"):
         return {"route": "no service", "travel_time": "no service", "travel_cost": "no service", "travel_guide": ""}
-    if cashe == False :
-        if check_line(source) == check_line(destination):
-            graph = graphes[check_line(source)]
 
-        else:
-            graph = graphes['graph_all']
-        route: list = find_path(graph, source, destination)[0]
+    if check_line(source) == check_line(destination):
+        graph = graphes[check_line(source)]
+
+    elif len(set(lines[check_line(source)]).intersection(lines[check_line(destination)])) >= 1:
+        graph = graphes['linetoline'][f"{check_line(source)}to{check_line(destination)}"]
     else :
-        if check_line(source) == check_line(destination):
-            route = stations_cashe[check_line(source)][f'{source}-{destination}']
-        else :
-            route = stations_cashe['all'][f'{source}-{destination}']
-    # now = datetime.strptime(f"{datetime.now().hour}:{ datetime.now().minute}", "%H:%M")
+        graph = graphes['graph_all']
+
+    route: list = find_path(graph, source, destination)[0]
+
+    
 
 
     
@@ -109,8 +109,10 @@ def find_best_route(source : str, destination :str , cashe : bool) -> dict:
     time = str(datetime.strptime(now, "%H:%M") - start_time).split(":")
 
     return {"route": overview, 
-            "travel_time": f"{time[0]}:{time[1]}", 
+            "travel_duration": f"{time[0]}:{time[1]}", 
             "travel_cost": check_cost(travel_cost), 
             "travel_guide": travel_guide, 
-            "next_train": next_train}
-
+            "next_train": next_train,
+            "arrival time" : now}
+with open(os.getcwd() + '/Core/static/stations_resualt.json', 'w', encoding='UTF-8') as file:
+        file.write(json.dumps(find_best_route("آزادگان", "تجریش"), ensure_ascii=False))
