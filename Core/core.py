@@ -53,8 +53,7 @@ def find_best_route(source : str, destination :str) -> dict:
                 corrent_line: str = check_line(route[i], route[i + 1])
                 terminal_direction: str = find_terminal_direction(
                     corrent_line, route[i], route[i + 1])
-                add_overview_entry(overview, route[i], now, corrent_line, True, f"در ایستگاه {route[i]} از قطار پیاده شده و با توجه به تابلو های راهنمای به سمت {
-                                   terminal_direction} وارد خط {check_line(route[i], route[i + 1]).replace('line_', '')} شوید.")
+                add_overview_entry(overview, route[i], now, corrent_line, True, f"در ایستگاه {route[i]} از قطار پیاده شده و با توجه به تابلو های راهنمای به سمت {terminal_direction} وارد خط {check_line(route[i], route[i + 1]).replace('line_', '')} شوید.")
                 add_travel_guide_entry("change", travel_guide, route[i], check_line(
                     route[i], route[i + 1]).replace('line_', ''), terminal_direction)
                 time: list = stations_times[corrent_line][corrent_line]["عادی"][terminal_direction][route[i]]
