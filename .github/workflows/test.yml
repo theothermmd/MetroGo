@@ -1,13 +1,18 @@
-name: Run Tests
+name: Run Tests on Multiple Python Versions
 
 on:
   push:
     branches:
-      - main  # یا هر شاخه‌ای که می‌خواهید بررسی شود
+      - main  # شاخه‌ای که می‌خواهید بررسی شود
+  pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']  # نسخه‌های مورد نظر
 
     steps:
     - name: Checkout code
@@ -16,11 +21,11 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.13'  # یا نسخه پایتون مورد نظر
+        python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt  # اگر فایل requirements دارید
+        pip install -r requirements.txt  # اگر وابستگی دارید، نصب کنید
 
     - name: Run Tests
       run: |
