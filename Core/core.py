@@ -3,7 +3,7 @@ from dijkstar import find_path
 from libs.functions import *
 base_path = os.path.join(os.getcwd(), "Core", "static")
 graphes = graph_generator()
-import cProfile
+
 
 def find_best_route(source : str, destination :str) -> dict:
 
@@ -31,10 +31,6 @@ def find_best_route(source : str, destination :str) -> dict:
 
     route: list = find_path(graph, source, destination)[0]
 
-    
-
-
-    
     corrent_line: str = check_line(route[0], route[1])
     terminal_direction: str = find_terminal_direction(
         corrent_line, route[0], route[1])
@@ -49,17 +45,13 @@ def find_best_route(source : str, destination :str) -> dict:
                 corrent_line: str = check_line(route[i], route[i - 1])
                 time: list = stations_times[corrent_line][corrent_line]["عادی"][terminal_direction][route[i]]
                 now, flag = get_next_time(time, now)
-
                 corrent_line: str = check_line(route[i], route[i + 1])
-                terminal_direction: str = find_terminal_direction(
-                    corrent_line, route[i], route[i + 1])
+                terminal_direction: str = find_terminal_direction(corrent_line, route[i], route[i + 1])
                 add_overview_entry(overview, route[i], now, corrent_line, True, f"در ایستگاه {route[i]} از قطار پیاده شده و با توجه به تابلو های راهنمای به سمت {terminal_direction} وارد خط {check_line(route[i], route[i + 1]).replace('line_', '')} شوید.")
-                add_travel_guide_entry("change", travel_guide, route[i], check_line(
-                    route[i], route[i + 1]).replace('line_', ''), terminal_direction)
+                add_travel_guide_entry("change", travel_guide, route[i], check_line( route[i], route[i + 1]).replace('line_', ''), terminal_direction)
                 time: list = stations_times[corrent_line][corrent_line]["عادی"][terminal_direction][route[i]]
                 now, flag = get_next_time(time, now)
-                add_overview_entry(
-                    overview, route[i], now, corrent_line, False, "")
+                add_overview_entry( overview, route[i], now, corrent_line, False, "")
                 travel_cost += 2
             else:
                 if i == 0:
@@ -69,22 +61,17 @@ def find_best_route(source : str, destination :str) -> dict:
 
                 time: list = stations_times[corrent_line][corrent_line]["عادی"][terminal_direction][route[i]]
 
-                try:
-                    now, flag = get_next_time(time, now)
-                except Exception as e:
-                    print(f"line : {corrent_line} , ter : {terminal_direction} , station : {
-                          route[i]} , dest : {terminal_direction} , line : {corrent_line} .e : {e} ")
+                
+                now, flag = get_next_time(time, now)
                 if flag and i == 0:
                     add_overview_entry(
                         overview, route[i], now, corrent_line, False, "")
                 elif flag and i != 0:
-                    add_overview_entry(
-                        overview, route[i], now, corrent_line, False, "در قطار پیاده شده و منتظر بمانید")
+                    add_overview_entry( overview, route[i], now, corrent_line, False, "در قطار پیاده شده و منتظر بمانید")
                     overview[len(overview) - 2]['message'] = "در این ایستگاه"
                 else:
 
-                    add_overview_entry(
-                        overview, route[i], now, corrent_line, False, "")
+                    add_overview_entry( overview, route[i], now, corrent_line, False, "")
                 travel_cost += 2
                 if i == 0:
                     next_train = str(datetime.strptime(now, "%H:%M") - start_time)
@@ -99,10 +86,8 @@ def find_best_route(source : str, destination :str) -> dict:
                 route[i], route[i - 1])]["عادی"][terminal_direction][route[i]]
 
             now, flag = get_next_time(time, now)
-            add_overview_entry(
-                overview, route[i], now, corrent_line, False, "")
-            add_travel_guide_entry("destination", travel_guide, route[i], check_line(
-                route[i], route[i - 1]).replace('line_', ''), terminal_direction)
+            add_overview_entry( overview, route[i], now, corrent_line, False, "")
+            add_travel_guide_entry("destination", travel_guide, route[i], check_line(route[i], route[i - 1]).replace('line_', ''), terminal_direction)
             travel_cost += 2
 
     time = str(datetime.strptime(now, "%H:%M") - start_time).split(":")
