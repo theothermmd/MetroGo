@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-CASHE = os.getenv('CASHE')
 PORT = os.getenv('PORT')
 LISTEN = os.getenv('LISTEN')
 
@@ -70,7 +69,7 @@ async def rate_limit_middleware(request: Request, call_next):
 @app.post("/get_route/")
 async def get_route(request: RouteRequest):
     try:
-        route_data = find_best_route(request.source, request.destination, CASHE)
+        route_data = find_best_route(request.source, request.destination)
         return JSONResponse(content=route_data, status_code=200)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

@@ -53,6 +53,7 @@ def is_time_valid(time_str):
 
 def get_next_time(station_times, current_time):
     current_time = datetime.strptime(current_time, "%H:%M") if not isinstance(current_time, datetime) else current_time
+    
     no_schedule_flag = False
 
     for time_str in station_times:
