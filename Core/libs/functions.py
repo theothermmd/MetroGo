@@ -10,10 +10,10 @@ import bisect
 base_path = os.path.join(os.getcwd(), "Core", "static")
 
 # marge files to one file
-stations_times = {f"line_{i}": json.load(open(f"{base_path}/stations_{i}.json", "r", encoding="UTF-8")) for i in range(1, 8)}
+stations_times = {f"line_{i}": json.load(open(f"stations_{i}.json", "r", encoding="UTF-8")) for i in range(1, 8)}
 
 # marge these lines to one
-stations = json.load(open(f"{base_path}/stations.json", "r", encoding="utf-8"))
+stations = json.load(open(f"stations.json", "r", encoding="utf-8"))
 lines = {f"line_{m}": stations["stations"][f"line_{m}"] for m in range(1, 8)}
 
 
