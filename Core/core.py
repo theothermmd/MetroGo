@@ -10,7 +10,7 @@ def find_best_route(source: str, destination: str) -> dict:
     source: str = find_closest_word(source, stations_names)
     destination: str = find_closest_word(destination, stations_names)
 
-    now = datetime.strptime(f"{datetime.now().hour}:{ datetime.now().minute}", "%H:%M")
+    now = datetime.strptime(f"{datetime.now().hour}:{datetime.now().minute}", "%H:%M")
     start_time: datetime = now
 
     if not datetime.strptime("5:00", "%H:%M") < now < datetime.strptime("22:00", "%H:%M"):
@@ -18,8 +18,8 @@ def find_best_route(source: str, destination: str) -> dict:
 
     if check_line(source) == check_line(destination):
         graph = graphes['lines'][check_line(source)]
-
-    elif len(set(lines[check_line(source)]).intersection(lines[check_line(destination)])) >= 1:
+    
+    elif len( set( lines[check_line(source)]).intersection( lines[check_line(destination)] ) ) >= 1:
         graph = graphes['linetoline'][f"{check_line(source)}to{check_line(destination)}"]
 
     else:
@@ -89,5 +89,4 @@ def find_best_route(source: str, destination: str) -> dict:
             "travel_guide": travel_guide,
             "next_train": next_train,
             "arrival time": now}
-
 
