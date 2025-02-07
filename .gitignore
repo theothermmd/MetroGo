@@ -1,0 +1,6 @@
+__pycache__
+.DS_Store
+.ruff_cache
+.vscode
+.env
+localtemps
