@@ -1,8 +1,10 @@
+Metrogo
 <h1>
   <img src="static/banner.png"/>
-  Metrogo
 </h1>
-Metro route finder. With train schedules and more, written in Python.
+  <p align="center">
+  <i>Linting the CPython codebase from scratch.</i>
+</p>
 
 ## 📖 Table of Contents
 - [✨ Features](#-features)
