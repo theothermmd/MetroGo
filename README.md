@@ -1,8 +1,18 @@
-<h1 align="center">
+<h1>
   <img src="static/banner.png"/>
-  Metrogo / Metro route finder with accessories
+  Metrogo
+  <br>
+  <sub>Metro route finder with accessories</sub>
 </h1>
 
+<div align="center">
+
+[![Stars](https://img.shields.io/github/stars/Diramid/hey-403-cli?logo=starship&color=gold)](https://github.com/Diramid/hey403/stargazers)
+[![Forks](https://img.shields.io/github/forks/Diramid/hey-403-cli?logo=git&color=9cf)](https://github.com/Diramid/hey403/forks)
+[![Issues](https://img.shields.io/github/issues/Diramid/hey-403-cli?logo=openbugbounty&color=red)](https://github.com/Diramid/hey403/issues)
+[![License](https://img.shields.io/github/license/Diramid/hey-403-cli?logo=open-source-initiative&color=green)](https://github.com/Diramid/hey403/blob/main/LICENSE)
+
+</div>
 
 ## 📖 Table of Contents
 - [✨ Features](#-features)
