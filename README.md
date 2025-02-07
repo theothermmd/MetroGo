@@ -1,6 +1,8 @@
 
 <img src="static/banner.png"/>
-<i>Linting the CPython codebase from scratch.</i>
+<p align="center">
+  <i>Linting the CPython codebase from scratch.</i>
+</p>
 
 
 ## 📖 Table of Contents
