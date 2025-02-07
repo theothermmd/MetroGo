@@ -1,7 +1,7 @@
 
 <img src="static/banner.png"/>
 <p align="center">
-  <i>Linting the CPython codebase from scratch.</i>
+  <i>Metro route finder. With train schedules and more, written in Python.</i>
 </p>
 
 
