@@ -1,7 +1,7 @@
 [project]
 name = "Metrogo"
 version = "0.1"
-description = "Metro route planner, with information including train schedules"
+description = "Metro route finder, with information including train schedules"
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
