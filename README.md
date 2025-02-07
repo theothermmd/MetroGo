@@ -4,16 +4,6 @@
   <i>Metro route finder. With train schedules and more, written in Python.</i>
 </p>
 
-
-
-## 📖 Table of Contents
-- [✨ Features](#-features)
-- [🚀 Quick Start](#-quick-start)
-- [🔧 Usage Examples](#-usage-examples)
-- [🤝 Contributing](#-contributing)
-- [⚖️ License](#️-license)
-
-
 ## 🌟 About Metrogo
 **MetroGo**  is a fast and simple metro navigation app designed for the general public, and with auto-correction of station names and written directions, a wide range of people can use MetroGo. MetroGo provides you with the following features:
 
