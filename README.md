@@ -3,6 +3,7 @@
   Metrogo
 </h1>
 Metro route finder. With train schedules and more, written in Python.
+
 ## 📖 Table of Contents
 - [✨ Features](#-features)
 - [🚀 Quick Start](#-quick-start)
