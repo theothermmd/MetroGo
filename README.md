@@ -1,8 +1,6 @@
-Metrogo
-<h1>
-  <img src="static/banner.png"/>
-  <i>Linting the CPython codebase from scratch.</i>
-</h1>
+
+<img src="static/banner.png"/>
+<i>Linting the CPython codebase from scratch.</i>
 
 
 ## 📖 Table of Contents
