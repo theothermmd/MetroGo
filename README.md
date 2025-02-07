@@ -1,10 +1,7 @@
 <h1 align="center">
   <img src="static/banner.png"/>
-  Metrogo
-  <br>
-  <sub>Metro route finder with accessories</sub>
+  Metrogo / Metro route finder with accessories
 </h1>
-
 <div align="center">
 
 [![Stars](https://img.shields.io/github/stars/Diramid/hey-403-cli?logo=starship&color=gold)](https://github.com/Diramid/hey403/stargazers)
