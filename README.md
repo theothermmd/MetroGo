@@ -1,10 +1,9 @@
 Metrogo
 <h1>
   <img src="static/banner.png"/>
-</h1>
-  <p align="center">
   <i>Linting the CPython codebase from scratch.</i>
-</p>
+</h1>
+
 
 ## 📖 Table of Contents
 - [✨ Features](#-features)
