@@ -8,19 +8,22 @@ class WordUtils:
 
 	@staticmethod
 	def correct_persian_text(text: str) -> str:
+
 		translation_map = str.maketrans(
-			{
-				"ي": "ی",
-				"ك": "ک",
-				"ە": "ه",
-				"إ": "ا",
-				"ؤ": "و",
-				"ء": "",
-				"ة": "ه",
-				"٫": ".",
-				"٬": ",",
-			}
-		)
+				{
+					"ي": "ی",
+					"ك": "ک",
+					"ە": "ه",
+					"إ": "ا",
+					"ؤ": "و",
+					"ء": "",
+					"ة": "ه",
+					"٫": ".",
+					"٬": ",",
+					"ّ": ""
+				}
+			)
+
 		return text.translate(translation_map)
 
 	def find_closest_word(self, input_word: str, score_threshold: int = 70) -> Optional[str]:

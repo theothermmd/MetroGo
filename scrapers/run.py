@@ -16,7 +16,8 @@ def run():
 	import line_6
 	import line_7
 	import parand
-
+	import mehrabad
+	import hashtgerd
 	import libs.WordUtils as WordUtils
 
 	line_1 = [WordUtils.WordUtils.correct_persian_text(i) for i in line_1.line_1()]
@@ -27,6 +28,8 @@ def run():
 	line_6 = [WordUtils.WordUtils.correct_persian_text(i) for i in line_6.line_6()]
 	line_7 = [WordUtils.WordUtils.correct_persian_text(i) for i in line_7.line_7()]
 	line_parand = [WordUtils.WordUtils.correct_persian_text(i) for i in parand.parand()]
+	line_mehrabad = [WordUtils.WordUtils.correct_persian_text(i) for i in mehrabad.mehrabad()]
+	line_hashtgerd = [WordUtils.WordUtils.correct_persian_text(i) for i in hashtgerd.hashtgerd()]
 
 	x = {
 		"stations": {
@@ -35,7 +38,9 @@ def run():
 			"line_2": line_2,
 			"line_3": line_3,
 			"line_4": line_4,
+			"line_mehrabad" : line_mehrabad,
 			"line_5": line_5,
+			"line_hashtgerd" : line_hashtgerd,
 			"line_6": line_6,
 			"line_7": line_7,
 		}
